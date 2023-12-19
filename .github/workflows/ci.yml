@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+jobs:
+  check-module:
+    name: Run Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 19
+
+      # ESLint and Prettier must be in `package.json`
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Run lints
+        run: npm run lint
+
+      - name: Check OpenAPI file
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "./openapi.yaml"
+
+      - uses: stoplightio/spectral-action@latest
+        with:
+          file_glob: './openapi.yaml'
+
+      - name: Run tests
+        run: npm test
