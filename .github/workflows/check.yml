@@ -1,11 +1,11 @@
-name: Lint
+name: CI
 
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
 
 jobs:
-  run-linters:
+  check-module:
     name: Run linters
     runs-on: ubuntu-latest
 
@@ -22,10 +22,8 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
 
-      - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
+      - name: Run lints
+        run: npm run lint
 
       - name: Run tests
         run: npm test
