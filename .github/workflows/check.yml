@@ -6,7 +6,7 @@ on:
 
 jobs:
   check-module:
-    name: Run linters
+    name: Run Checks
     runs-on: ubuntu-latest
 
     steps:
